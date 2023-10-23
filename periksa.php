@@ -6,7 +6,7 @@
   
   if (isset($_POST['simpan'])) {
     if (isset($_POST['id'])) {
-      $ubah = mysqli_query($koneksi, "UPDATE dokter SET 
+      $ubah = mysqli_query($koneksi, "UPDATE pasien SET 
                                           nama = '" . $_POST['nama'] . "',
                                           alamat = '" . $_POST['alamat'] . "',
                                           no_hp = '" . $_POST['no_hp'] . "',
@@ -14,7 +14,7 @@
                                           id = '" . $_POST['id'] . "'");
       //update
     } else {
-      $tambah = mysqli_query($koneksi, "INSERT INTO dokter (nama, alamat, no_hp)
+      $tambah = mysqli_query($koneksi, "INSERT INTO pasien (nama, alamat, no_hp)
                       VALUES (
                         '" . $_POST['nama'] . "',
                         '" . $_POST['alamat'] . "',
@@ -22,16 +22,16 @@
                       )");
     }
 
-    echo "<script>document.location='dokter.php';</script>";
+    echo "<script>document.location='pasien.php';</script>";
   }
 
   if (isset($_GET['aksi'])) {
     // Delete
     if ($_GET['aksi'] == 'hapus'){
-      $hapus = mysqli_query($koneksi, "DELETE FROM dokter WHERE id = '" . $_GET['id'] . "'");
+      $hapus = mysqli_query($koneksi, "DELETE FROM pasien WHERE id = '" . $_GET['id'] . "'");
     } 
 
-    echo "<script>document.location='dokter.php';</script>";
+    echo "<script>document.location='pasien.php';</script>";
   }
   
 ?>
@@ -80,7 +80,7 @@
 
     
     <div class="p-5">
-    	<h2>Dokter</h2>
+    	<h2>Data Periksa</h2>
 
     	<form class="mt-3" method="POST" action="" name="myForm" onsubmit="return(validate());">
     		<?php
@@ -88,7 +88,7 @@
         $alamat = '';
         $no_hp = '';
 				if (isset($_GET['id'])) {
-				    $ambil = mysqli_query($koneksi, "SELECT * FROM dokter 
+				    $ambil = mysqli_query($koneksi, "SELECT * FROM pasien 
 				    WHERE id='" . $_GET['id'] . "'");
 				    while ($row = mysqli_fetch_array($ambil)) {
 				        $nama = $row['nama'];
@@ -100,20 +100,57 @@
 				<?php
 				}
         ?>
-  		  <div class="mb-3">
-  		    <label for="exampleInputName" class="form-label">Nama</label>
-  		    <input type="name" class="form-control" id="exampleInputName" value="<?= $nama ?>" name="nama">
-  		  </div>
+        <div class="form-group mb-3">
+          <label for="inputPasien" class="sr-only">Pasien</label>
+            <select class="form-control" name="id_pasien">
+                <?php
+                $selected = '';
+                $pasien = mysqli_query($koneksi, "SELECT * FROM pasien");
+                while ($data = mysqli_fetch_array($pasien)) {
+                    if ($data['id'] == $id_pasien) {
+                        $selected = 'selected="selected"';
+                    } else {
+                        $selected = '';
+                    }
+                ?>
+                    <option value="<?php echo $data['id'] ?>" <?php echo $selected ?>><?php echo $data['nama'] ?></option>
+                <?php
+                }
+                ?>
+            </select>
+        </div>
 
-  		  <div class="mb-3">
-  		    <label for="exampleInputAddress" class="form-label">Alamat</label>
-  		    <input type="address" class="form-control" id="exampleInputAddress" value="<?= $alamat ?>" name="alamat">
-  		  </div>
+        <div class="form-group mb-3">
+          <label for="inputDokter" class="sr-only">Dokter</label>
+            <select class="form-control" name="id_dokter">
+                <?php
+                $selected = '';
+                $dokter = mysqli_query($koneksi, "SELECT * FROM dokter");
+                while ($data = mysqli_fetch_array($dokter)) {
+                    if ($data['id'] == $id_dokter) {
+                        $selected = 'selected="selected"';
+                    } else {
+                        $selected = '';
+                    }
+                ?>
+                    <option value="<?php echo $data['id'] ?>" <?php echo $selected ?>><?php echo $data['nama'] ?></option>
+                <?php
+                }
+                ?>
+            </select>
+        </div>
 
-  		  <div class="mb-3">
-  		    <label for="exampleInputPhone" class="form-label">No. Hp</label>
-  		    <input type="phone" class="form-control" id="exampleInputPhone" value="<?= $no_hp ?>" name="no_hp">
-  		  </div>
+        <div class="col mb-3">
+            <label for="inputTanggalPeriksa" class="form-label fw-bold">
+                Tanggal Periksa
+            </label>
+            <input type="date" class="form-control" name="tgl_awal" id="inputTanggalPeriksa" placeholder="Tanggal Periksa">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleCatatan" class="form-label">Catatan</label>
+          <!-- <input type="catatan" class="form-control" id="exampleCatatan" value="<?= $catatan ?>" name="catatan"> -->
+        </div>
 
   		  <button type="submit" class="btn btn-primary px-3 mt-3" name="simpan">Simpan</button>
 		  </form>
@@ -122,31 +159,28 @@
     <div class="container-fluid p-5">
       <table class="table">
         <tbody>
-            <?php 
-              $result = mysqli_query($koneksi, "SELECT * FROM dokter");
-              $no = 1;
-              while ($data = mysqli_fetch_array($result)) { ?>
+            <?php
+            $result = mysqli_query($koneksi, "SELECT pr.*,d.nama as 'nama_dokter', p.nama as 'nama_pasien' FROM periksa pr LEFT JOIN dokter d ON (pr.id_dokter=d.id) LEFT JOIN pasien p ON (pr.id_pasien=p.id) ORDER BY pr.tgl_periksa DESC");
+            $no = 1;
+            while ($data = mysqli_fetch_array($result)) {
+            ?>
               <tr>
-                <td>
-                  <?php echo $no++ ?>
-                </td>
-                <td>
-                  <?php echo $data['nama'] ?>
-                </td>
-                <td>
-                  <?php echo $data['alamat'] ?>
-                </td>
-                <td>
-                  <?php echo $data['no_hp'] ?>
-                </td>
-                <td>
-                  <a href="index.php?page=dokter&id=<?php echo $data['id'] ?>" class="btn btn-success">Ubah</a>
-                  <a href="index.php?page=dokter&id=<?php echo $data['id'] ?>&aksi=hapus" class="btn btn-danger">Hapus</a>
-                </td>
-              </tr>     
-            <?php 
-              }
-             ?>
+                  <td><?php echo $no++ ?></td>
+                  <td><?php echo $data['nama_pasien'] ?></td>
+                  <td><?php echo $data['nama_dokter'] ?></td>
+                  <td><?php echo $data['tgl_periksa'] ?></td>
+                  <td><?php echo $data['catatan'] ?></td>
+                  <td>
+                      <a class="btn btn-success rounded-pill px-3" 
+                      href="index.php?page=periksa&id=<?php echo $data['id'] ?>">
+                      Ubah</a>
+                      <a class="btn btn-danger rounded-pill px-3" 
+                      href="index.php?page=periksa&id=<?php echo $data['id'] ?>&aksi=hapus">Hapus</a>
+                  </td>
+              </tr>
+            <?php
+            }
+            ?>
         </tbody>
       </table>
     </div>

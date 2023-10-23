@@ -6,7 +6,7 @@
   
   if (isset($_POST['simpan'])) {
     if (isset($_POST['id'])) {
-      $ubah = mysqli_query($koneksi, "UPDATE dokter SET 
+      $ubah = mysqli_query($koneksi, "UPDATE pasien SET 
                                           nama = '" . $_POST['nama'] . "',
                                           alamat = '" . $_POST['alamat'] . "',
                                           no_hp = '" . $_POST['no_hp'] . "',
@@ -14,7 +14,7 @@
                                           id = '" . $_POST['id'] . "'");
       //update
     } else {
-      $tambah = mysqli_query($koneksi, "INSERT INTO dokter (nama, alamat, no_hp)
+      $tambah = mysqli_query($koneksi, "INSERT INTO pasien (nama, alamat, no_hp)
                       VALUES (
                         '" . $_POST['nama'] . "',
                         '" . $_POST['alamat'] . "',
@@ -22,16 +22,16 @@
                       )");
     }
 
-    echo "<script>document.location='dokter.php';</script>";
+    echo "<script>document.location='pasien.php';</script>";
   }
 
   if (isset($_GET['aksi'])) {
     // Delete
     if ($_GET['aksi'] == 'hapus'){
-      $hapus = mysqli_query($koneksi, "DELETE FROM dokter WHERE id = '" . $_GET['id'] . "'");
+      $hapus = mysqli_query($koneksi, "DELETE FROM pasien WHERE id = '" . $_GET['id'] . "'");
     } 
 
-    echo "<script>document.location='dokter.php';</script>";
+    echo "<script>document.location='pasien.php';</script>";
   }
   
 ?>
@@ -80,7 +80,7 @@
 
     
     <div class="p-5">
-    	<h2>Dokter</h2>
+    	<h2>Pasien</h2>
 
     	<form class="mt-3" method="POST" action="" name="myForm" onsubmit="return(validate());">
     		<?php
@@ -88,7 +88,7 @@
         $alamat = '';
         $no_hp = '';
 				if (isset($_GET['id'])) {
-				    $ambil = mysqli_query($koneksi, "SELECT * FROM dokter 
+				    $ambil = mysqli_query($koneksi, "SELECT * FROM pasien 
 				    WHERE id='" . $_GET['id'] . "'");
 				    while ($row = mysqli_fetch_array($ambil)) {
 				        $nama = $row['nama'];
@@ -123,7 +123,7 @@
       <table class="table">
         <tbody>
             <?php 
-              $result = mysqli_query($koneksi, "SELECT * FROM dokter");
+              $result = mysqli_query($koneksi, "SELECT * FROM pasien");
               $no = 1;
               while ($data = mysqli_fetch_array($result)) { ?>
               <tr>
@@ -140,8 +140,8 @@
                   <?php echo $data['no_hp'] ?>
                 </td>
                 <td>
-                  <a href="index.php?page=dokter&id=<?php echo $data['id'] ?>" class="btn btn-success">Ubah</a>
-                  <a href="index.php?page=dokter&id=<?php echo $data['id'] ?>&aksi=hapus" class="btn btn-danger">Hapus</a>
+                  <a href="index.php?page=pasien&id=<?php echo $data['id'] ?>" class="btn btn-success">Ubah</a>
+                  <a href="index.php?page=pasien&id=<?php echo $data['id'] ?>&aksi=hapus" class="btn btn-danger">Hapus</a>
                 </td>
               </tr>     
             <?php 
