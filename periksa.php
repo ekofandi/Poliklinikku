@@ -6,32 +6,36 @@
   
   if (isset($_POST['simpan'])) {
     if (isset($_POST['id'])) {
-      $ubah = mysqli_query($koneksi, "UPDATE pasien SET 
-                                          nama = '" . $_POST['nama'] . "',
-                                          alamat = '" . $_POST['alamat'] . "',
-                                          no_hp = '" . $_POST['no_hp'] . "',
+      $ubah = mysqli_query($koneksi, "UPDATE periksa SET 
+                                          id_pasien = '" . $_POST['id_pasien'] . "',
+                                          id_dokter = '" . $_POST['id_dokter'] . "',
+                                          tgl_periksa = '" . $_POST['tgl_periksa'] . "',
+                                          catatan = '" . $_POST['catatan'] . "',
+                                          obat = '" . $_POST['obat'] . "'
                                           WHERE
                                           id = '" . $_POST['id'] . "'");
       //update
     } else {
-      $tambah = mysqli_query($koneksi, "INSERT INTO pasien (nama, alamat, no_hp)
+      $tambah = mysqli_query($koneksi, "INSERT INTO periksa (id_pasien, id_dokter, tgl_periksa, catatan, obat)
                       VALUES (
-                        '" . $_POST['nama'] . "',
-                        '" . $_POST['alamat'] . "',
-                        '" . $_POST['no_hp'] . "'
+                        '" . $_POST['id_pasien'] . "',
+                        '" . $_POST['id_dokter'] . "',
+                        '" . $_POST['tgl_periksa'] . "',
+                        '" . $_POST['catatan'] . "',
+                        '" . $_POST['obat'] . "'
                       )");
     }
 
-    echo "<script>document.location='pasien.php';</script>";
+    echo "<script>document.location='periksa.php';</script>";
   }
 
   if (isset($_GET['aksi'])) {
     // Delete
     if ($_GET['aksi'] == 'hapus'){
-      $hapus = mysqli_query($koneksi, "DELETE FROM pasien WHERE id = '" . $_GET['id'] . "'");
+      $hapus = mysqli_query($koneksi, "DELETE FROM periksa WHERE id = '" . $_GET['id'] . "'");
     } 
 
-    echo "<script>document.location='pasien.php';</script>";
+    echo "<script>document.location='periksa.php';</script>";
   }
   
 ?>
@@ -84,16 +88,20 @@
 
     	<form class="mt-3" method="POST" action="" name="myForm" onsubmit="return(validate());">
     		<?php
-        $nama = '';
-        $alamat = '';
-        $no_hp = '';
+        $id_dokter;
+        $id_pasien;
+        $tgl_periksa = '';
+        $catatan = '';
+        $obat = '';
 				if (isset($_GET['id'])) {
-				    $ambil = mysqli_query($koneksi, "SELECT * FROM pasien 
+				    $ambil = mysqli_query($koneksi, "SELECT * FROM periksa 
 				    WHERE id='" . $_GET['id'] . "'");
 				    while ($row = mysqli_fetch_array($ambil)) {
-				        $nama = $row['nama'];
-                $alamat = $row['alamat'];
-                $no_hp = $row['no_hp'];
+				        $id_dokter = $row['id_dokter'];
+                $id_pasien = $row['id_pasien'];
+                $tgl_periksa = $row['tgl_periksa'];
+                $catatan = $row['catatan'];
+                $obat = $row['obat'];
 				    }
 				?>
 				    <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
@@ -144,12 +152,17 @@
             <label for="inputTanggalPeriksa" class="form-label fw-bold">
                 Tanggal Periksa
             </label>
-            <input type="date" class="form-control" name="tgl_awal" id="inputTanggalPeriksa" placeholder="Tanggal Periksa">
+            <input type="datetime-local" class="form-control" name="tgl_periksa" id="inputTanggalPeriksa" placeholder="Tanggal Periksa" value="<?= $tgl_periksa ?>">
         </div>
 
         <div class="mb-3">
           <label for="exampleCatatan" class="form-label">Catatan</label>
-          <!-- <input type="catatan" class="form-control" id="exampleCatatan" value="<?= $catatan ?>" name="catatan"> -->
+          <input type="text" class="form-control" id="exampleCatatan" value="<?php echo $catatan ?>" name="catatan">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleObat" class="form-label">Obat</label>
+          <input type="text" class="form-control" id="exampleObat" value="<?php echo $obat ?>" name="obat">
         </div>
 
   		  <button type="submit" class="btn btn-primary px-3 mt-3" name="simpan">Simpan</button>
@@ -170,12 +183,13 @@
                   <td><?php echo $data['nama_dokter'] ?></td>
                   <td><?php echo $data['tgl_periksa'] ?></td>
                   <td><?php echo $data['catatan'] ?></td>
+                  <td><?php echo $data['obat'] ?></td>
                   <td>
                       <a class="btn btn-success rounded-pill px-3" 
-                      href="index.php?page=periksa&id=<?php echo $data['id'] ?>">
+                      href="periksa.php?page=periksa&id=<?php echo $data['id'] ?>">
                       Ubah</a>
                       <a class="btn btn-danger rounded-pill px-3" 
-                      href="index.php?page=periksa&id=<?php echo $data['id'] ?>&aksi=hapus">Hapus</a>
+                      href="periksa.php?page=periksa&id=<?php echo $data['id'] ?>&aksi=hapus">Hapus</a>
                   </td>
               </tr>
             <?php

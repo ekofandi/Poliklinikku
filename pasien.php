@@ -9,7 +9,7 @@
       $ubah = mysqli_query($koneksi, "UPDATE pasien SET 
                                           nama = '" . $_POST['nama'] . "',
                                           alamat = '" . $_POST['alamat'] . "',
-                                          no_hp = '" . $_POST['no_hp'] . "',
+                                          no_hp = '" . $_POST['no_hp'] . "'
                                           WHERE
                                           id = '" . $_POST['id'] . "'");
       //update
@@ -140,8 +140,8 @@
                   <?php echo $data['no_hp'] ?>
                 </td>
                 <td>
-                  <a href="index.php?page=pasien&id=<?php echo $data['id'] ?>" class="btn btn-success">Ubah</a>
-                  <a href="index.php?page=pasien&id=<?php echo $data['id'] ?>&aksi=hapus" class="btn btn-danger">Hapus</a>
+                  <a href="pasien.php?page=pasien&id=<?php echo $data['id'] ?>" class="btn btn-success">Ubah</a>
+                  <a href="pasien.php?page=pasien&id=<?php echo $data['id'] ?>&aksi=hapus" class="btn btn-danger">Hapus</a>
                 </td>
               </tr>     
             <?php 

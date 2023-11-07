@@ -1,3 +1,8 @@
+<?php require_once("koneksi.php");
+    if (!isset($_SESSION)) {
+        session_start();
+    } 
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,25 +10,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-	<?php 
-	session_start();
- 
-	// cek apakah yang mengakses halaman ini sudah login
-	if($_SESSION['level']==""){
-		header("location:index.php?pesan=gagal");
-	}
- 
-	?>
-	<div class="card_dasbot">
-		<h1 style="font-size: 24px; font-weight: bold;">Halaman Admin</h1>
- 
-		<p style="font-size: 18px; color: #B5B5B5; font-weight: 400;">Halo <b><?php echo $_SESSION['username']; ?></b> Anda telah login sebagai <b><?php echo $_SESSION['level']; ?></b>.</p>
-		<a href="logout.php" class="btn btn-danger">LOGOUT</a>
-		
-	</div>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary ps-5">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Poliklinik</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 mx-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="admin/dokter.php">Dokter</a></li>
+                <li><a class="dropdown-item" href="admin/pasien.php">Pasien</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin/periksa.php">Periksa</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav right-menu me-5">
+            <li class="nav-item d-flex align-items-center me-3">
+              <a href="logout.php" class="btn btn-danger">LOGOUT</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main role="main" class="container">
+      <?php
+        if (isset($_GET['page'])) {
+      ?>
+      <h2><?php echo ucwords($_GET['page']) ?></h2>
+      <?php
+        include($_GET['page'] . ".php");
+      } else {
+        echo "Selamat Datang di Sistem Informasi Poliklinik";
+      }
+      ?>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
   </body>

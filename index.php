@@ -29,17 +29,31 @@
                 Dropdown
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="dokter.php">Dokter</a></li>
-                <li><a class="dropdown-item" href="pasien.php">Pasien</a></li>
+                <li><a class="dropdown-item" href="login.php">Dokter</a></li>
+                <li><a class="dropdown-item" href="login.php">Pasien</a></li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="periksa.php">Periksa</a>
+              <a class="nav-link" href="login.php">Periksa</a>
             </li>
           </ul>
+          <!-- <ul class="navbar-nav right-menu me-5">
+            <?php
+            if (isset($_SESSION['userSession'])) {
+              # code...
+              echo '<li class="nav-item d-flex align-items-center me-3"><a class="btn" href="logout.php"><span>Log Out</span></a>   </li>';
+            } else{
+              echo '<li class="nav-item d-flex align-items-center me-3"><a class="btn btn-secondary" href="login.php"><span>Log In</span></a></li>';
+            }
+            ?>
+          </ul> -->
           <ul class="navbar-nav right-menu me-5">
+            <li class="nav-item d-flex align-items-center me-3">
+              <a href="register.php" class="btn" style="border-radius: 100px">Register</a>
+            </li>
+
             <li class="nav-item d-flex align-items-center">
-              <a href="login.php" class="btn btn-secondary" style="border-radius: 100px">Login</a>
+              <a href="login.php" class="btn btn-primary">Login</a>
             </li>
           </ul>
         </div>

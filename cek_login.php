@@ -17,41 +17,17 @@ $cek = mysqli_num_rows($login);
  
 // cek apakah username dan password di temukan pada database
 if($cek > 0){
- 
+	
 	$data = mysqli_fetch_assoc($login);
- 
+
 	// cek jika user login sebagai Admin
-	if($data['level']=="admin"){
- 
-		// buat session login dan username
-		$_SESSION['username'] = $username;
-		$_SESSION['level'] = "admin";
-		// alihkan ke halaman dashboard Admin
-		header("location:halaman_admin.php");
- 
-	// cek jika user login sebagai Pasien
-	}else if($data['level']=="pasien"){
-		// buat session login dan username
-		$_SESSION['username'] = $username;
-		$_SESSION['level'] = "pasien";
-		// alihkan ke halaman dashboard Pasien
-		header("location:halaman_pasien.php");
- 
-	// cek jika user login sebagai Perawat
-	}else if($data['level']=="perawat"){
-		// buat session login dan username
-		$_SESSION['username'] = $username;
-		$_SESSION['level'] = "perawat";
-		// alihkan ke halaman dashboard Perawat
-		header("location:halaman_perawat.php");
- 
-	}else{
- 
-		// alihkan ke halaman login kembali
-		header("location:index.php?pesan=gagal");
-	}	
+	$_SESSION['username'] = $username;
+	$_SESSION['status'] = "login";
+	// alihkan ke halaman dashboard Admin
+	header("location:admin/dashboard.php");
 }else{
-	header("location:index.php?pesan=gagal");
+	// alihkan ke halaman login kembali
+	header("location:login.php?pesan=gagal");
 }
- 
+
 ?>
